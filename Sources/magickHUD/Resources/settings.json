@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "settings": [
+    {
+      "key": "output.policy",
+      "title": "Save results",
+      "type": "enum",
+      "group": "Output",
+      "options": [
+        {"value": "same", "title": "Beside the original"},
+        {"value": "subfolder", "title": "In a subfolder beside the original"},
+        {"value": "folder", "title": "In one folder"}
+      ],
+      "default": "same",
+      "help": "Existing files are never overwritten: a -2, -3 ... is added instead."
+    },
+    {
+      "key": "output.subfolder",
+      "title": "Subfolder name",
+      "type": "string",
+      "group": "Output",
+      "default": "magickHUD"
+    },
+    {
+      "key": "output.folder",
+      "title": "Output folder",
+      "type": "path",
+      "group": "Output",
+      "default": "~/Pictures/magickHUD"
+    },
+    {
+      "key": "output.suffix",
+      "title": "Name suffix",
+      "type": "string",
+      "group": "Output",
+      "default": "_{preset}",
+      "help": "Added to the original name; {preset} becomes the preset's word (photo_resized.png)."
+    },
+    {
+      "key": "quality.default",
+      "title": "Default quality (1-100)",
+      "type": "int",
+      "group": "Presets",
+      "default": 85
+    },
+    {
+      "key": "magick.path",
+      "title": "magick binary",
+      "type": "path",
+      "group": "Presets",
+      "default": "",
+      "help": "Leave empty to find magick on PATH and in the Homebrew prefixes."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "xyz.machud.magickhud",
+  "name": "magickHUD",
+  "socket": "magickhud",
+  "panels": [
+    {
+      "id": "tools",
+      "title": "magickHUD",
+      "symbol": "wand.and.stars",
+      "kind": "hover",
+      "defaultSize": [720, 560],
+      "compactSize": [44, 44],
+      "capabilities": ["acceptsFileDrop"],
+      "verbs": ["show", "hide", "toggle", "frame", "mode", "drop", "run", "jobs", "cancel", "presets", "files", "clear"],
+      "settingsSchema": "settings.json",
+      "order": 4
+    }
+  ]
+}
