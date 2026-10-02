@@ -14,21 +14,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         HUDEditMenu.install(appName: "magickHUD")
         model = AppModel(settingsURL: AppEnvironment.settingsURL)
         panel = PanelController(model: model)
-        control = ControlHost(model: model, panel: panel)
-        control.start()
-        setupStatusItem()
-        // While MacHUD runs, its menu hosts this one and the icon hides (HUDKit menu bar consolidation).
-        control.router.menuProvider = { [weak self] in self?.statusItem?.menu }
-        // menuBar.consumed is kept in <home>/menubar.json, so MAGICKHUD_HOME isolates it too.
-        HUDStatusItemPolicy.attach(statusItem, appID: control.manifest.id, store: .home(AppEnvironment.baseDirectory))
-        if AppEnvironment.hotKeysEnabled,
-           HUDHotKeyCenter.shared.register(Self.toggleHotKey, onPress: { [weak self] in self?.panel.toggle() }) == nil {
-            model.show("⌃⌥I is taken by another app; use the menu bar icon", error: true)
-        }
-
         let args = CommandLine.arguments
         func value(_ flag: String) -> String? {
             args.firstIndex(of: flag).flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil }
+        }
+        // A `--snapshot` run only draws: no control socket (a running app owns that name), no
+        // announcement, no hotkey, no menu bar item.
+        let snapshotting = value("--snapshot") != nil
+        control = ControlHost(model: model, panel: panel)
+        if !snapshotting {
+            control.start()
+            setupStatusItem()
+            // While MacHUD runs, its menu hosts this one and the icon hides (HUDKit menu bar consolidation).
+            control.router.menuProvider = { [weak self] in self?.statusItem?.menu }
+            // menuBar.consumed is kept in <home>/menubar.json, so MAGICKHUD_HOME isolates it too.
+            HUDStatusItemPolicy.attach(statusItem, appID: control.manifest.id, store: .home(AppEnvironment.baseDirectory))
+            if AppEnvironment.hotKeysEnabled,
+               HUDHotKeyCenter.shared.register(Self.toggleHotKey, onPress: { [weak self] in self?.panel.toggle() }) == nil {
+                model.show("⌃⌥I is taken by another app; use the menu bar icon", error: true)
+            }
         }
         // `--preset <id>`: start on that preset. `--drop <paths>` (pipe-separated, percent-encoded):
         // start with those files. `--run`: run the preset on them once they are identified.
@@ -68,7 +72,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         model.jobs.filter(\.isActive).forEach { model.cancel($0.id) }
-        control.stop()
+        control?.stop()
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
