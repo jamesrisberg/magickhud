@@ -115,5 +115,5 @@ MAGICKHUD_SOCKET=magickhud-test build/magickHUD.app/Contents/Helpers/magickhud s
 | `--drop <paths>` | start with these images (the `action drop paths=` encoding: pipe-separated, percent-encoded) |
 | `--preset <id>` | start on that preset |
 | `--run` | run the preset on the dropped images (with `--snapshot`, the PNG is written after the run) |
-| `--snapshot <path.png>` | show the panel, write a PNG of it once it settles (dark stand-in for the glass) and quit |
+| `--snapshot <path.png>` | show the panel, write a PNG of it once it settles (dark stand-in for the glass) and quit; serves no control socket, announces nothing, registers no hotkey and adds no menu bar item, so it never touches a running instance |
 | `--snapshot-mode compact` | picture the compact tile rather than the full panel |
